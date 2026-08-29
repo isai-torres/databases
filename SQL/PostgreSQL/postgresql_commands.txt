@@ -1,0 +1,74 @@
+Important: Some commands are specific to Arch Linux, but most should work on other operating systems too.
+
+I. PostgreSQL basic Terminal Commands:
+
+  1. sudo -u postgres psql --> runs PostgreSQL's interactive shell as the postgres superuser.
+
+  2. psql -U user -W --> runs PostgreSQL with a specific user (-U) and prompts for a password (-W). psql -U user -d database_name -W --> connects to a specific database.
+
+  3. GRANT ALL PRIVILEGES ON DATABASE database_name TO username; --> This command grants all privileges on a specific database to a user/role. To grant on all tables inside a schema (PostgreSQL's closest concept to MySQL's database_name.* on tables), use: GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO username; You can also target a single table: GRANT ALL PRIVILEGES ON table_name TO username;
+
+  4. GRANT ALL PRIVILEGES ON DATABASE database_name TO username WITH GRANT OPTION; --> The "WITH GRANT OPTION" clause allows that user to grant the same privileges to other users. Same idea as MySQL, but there is no global *.* wildcard in PostgreSQL.
+
+  You can also specify which privileges you want to grant. For example:
+  GRANT SELECT, INSERT ON ALL TABLES IN SCHEMA public TO username;
+
+  | Privilege      | Description                                    |
+  | -------------- | ---------------------------------------------- |
+  |  SELECT        | Read data from tables                          |
+  |  INSERT        | Add new rows                                   |
+  |  UPDATE        | Modify existing data                           |
+  |  DELETE        | Remove rows                                    |
+  |  CREATE        | Create new tables, schemas, or databases       |
+  |  GRANT OPTION  | Allow user to grant their privileges to others |
+
+  5. \l --> Show all databases (psql meta-command). Equivalent to MySQL's SHOW DATABASES;
+
+  6. CREATE DATABASE database_name; --> This command creates a new database.
+
+  7. \c database_name --> This command selects (connects to) a database.
+
+  8. DROP DATABASE database_name; --> Delete a database.
+
+  9. \dt --> Shows all tables in the current schema.
+
+  10. DROP TABLE table_name; --> Delete a table.
+
+  11. \d table_name --> Describe a table (see columns, types, and constraints).
+
+  12. SELECT usename, useconfig FROM pg_user; --> Shows all PostgreSQL users/roles. PostgreSQL has no per-user "host" column like mysql.user — instead, which hosts/IPs may connect is controlled separately in the pg_hba.conf file, not through SQL.
+
+  13. \q --> Exits psql and returns to the system terminal.
+
+II. Check PostgreSQL status and more:
+
+  1. sudo systemctl status postgresql --> This checks if the PostgreSQL server is running or not.
+
+  2. sudo systemctl start postgresql --> If not running, start it.
+
+  3. sudo systemctl stop postgresql --> Stops PostgreSQL.
+
+  4. sudo systemctl enable postgresql --> Enable PostgreSQL to start at boot.
+
+  5. sudo systemctl disable postgresql --> Disable PostgreSQL from starting at boot.
+
+  6. sudo systemctl restart postgresql --> Restart PostgreSQL.
+
+III. Users (PostgreSQL calls them "roles"; a login-capable role behaves like a MySQL user):
+
+  1. CREATE USER username WITH PASSWORD 'your_password'; --> This command creates a new user. Unlike MySQL, PostgreSQL roles are not tied to a host by default — access from specific hosts is controlled in pg_hba.conf, not in the CREATE USER statement. (CREATE USER is shorthand for CREATE ROLE ... LOGIN.)
+
+  2. DROP USER username; --> Delete a user.
+
+  3. ALTER USER username WITH PASSWORD 'new_password'; --> Change a user's password.
+
+  4. ALTER USER old_username RENAME TO new_username; --> Rename a user/role.
+
+  5. REVOKE INSERT, UPDATE ON ALL TABLES IN SCHEMA public FROM username; --> Revoke privileges.
+
+  6. ALTER USER username NOLOGIN;
+     ALTER USER username LOGIN; --> Lock/unlock an account (disable login without deleting it).
+
+  7. \du --> To see current users/roles and their privileges (superuser, create-db, etc.) in one table.
+
+  8. \dp table_name --> To see a specific table's privileges/grants. Equivalent to MySQL's SHOW GRANTS FOR 'username'@'localhost'; (PostgreSQL shows grants per-object rather than per-user).
