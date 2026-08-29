@@ -31,7 +31,7 @@ I. Most Common SQL Data Types:
   |                    |  TIME         | Time only                       |  '14:30:00'             |
   |                    |  DATETIME     | Date and time                   |  '2025-10-06 14:30:00'  |
   |                    |  TIMESTAMP    | Date/time with timezone updates |  '2025-10-06 14:30:00'  |
-  |                    |  YEAR         | Year (4 digits)                 |   2025                   |
+  |                    |  YEAR         | Year (4 digits)                 |  '2025'                 |
 
 4. Binary / Other:
 
@@ -58,7 +58,7 @@ II. MySQL Constraints Table:
 |                                    |                                                                                                                            |
 |   DEFAULT                          | Sets a default value for the column when the user does not insert one.                                                     |
 |                                    |                                                                                                                            |
-|   CHECK                            | Validates a condition that data must satisfy (Example: age must be >= 0).                                                  |
+|   CHECK                            | Validates a condition that data must satisfy (Example: age must be > 0).                                                   |
 |                                    |                                                                                                                            |
 |   FOREIGN KEY                      | Creates a relationship between tables. Ensures values must exist in the referenced column of another table.                |
 |                                    |                                                                                                                            |

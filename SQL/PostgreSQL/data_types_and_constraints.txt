@@ -1,0 +1,78 @@
+I. Most Common SQL Data Types (PostgreSQL):
+
+1. Numeric:
+
+  |   Category     |   Data Type                       |   Description                          |   Example             |
+  | -------------- | --------------------------------- | -------------------------------------- | --------------------- |
+  |     Numeric    |  INTEGER  /  INT                  | Whole number (±2 billion range)        |  42                   |
+  |                |  BIGINT                           | Very large integer                     |  9000000000000000000  |
+  |                |  SMALLINT                         | Small integer                          |  120                  |
+  |                |  DECIMAL(p,s)  /  NUMERIC(p,s)    | Exact decimal (for money)              |  12.50                |
+  |                |  REAL                             | Approximate decimal (single precision) |  3.14                 |
+  |                |  DOUBLE PRECISION                 | Higher-precision floating-point number |  123.456789           |
+  |                |  BOOLEAN  /  BOOL                 | True or false                          |  TRUE                 |
+  |                |  SERIAL  /  BIGSERIAL             | Auto-incrementing integer              | 1, 2, 3, ...          |
+
+  Notes vs MySQL: PostgreSQL's FLOAT keyword is accepted but maps onto REAL or DOUBLE PRECISION depending on precision given, so it's more common to just write REAL/DOUBLE PRECISION directly.
+
+2. Text / String:
+
+  |   Category           |   Data Type         |   Description                                       |   Example          |
+  | -------------------- | ------------------- | --------------------------------------------------- | ------------------ |
+  |    Text / String     |  CHAR(n)            | Fixed-length string                                 | 'USA'              |
+  |                      |  VARCHAR(n)         | Variable-length string with a max length            | 'John Doe'         |
+  |                      |  TEXT               | Unlimited-length text, no size cap needed           | 'Lorem ipsum...'   |
+
+  Notes vs MySQL: PostgreSQL has a single TEXT type with no practical length limit, so it replaces MySQL's separate TEXT / MEDIUMTEXT / LONGTEXT tiers — you never need to pick a size tier, just use TEXT.
+
+3. Date and Time:
+
+  |   Category         |   Data Type                   |   Description                                   |   Example                        |
+  | ------------------ | ----------------------------- | ----------------------------------------------- | -------------------------------- |
+  |    Date & Time     |  DATE                         | Date only                                       |  '2025-10-06'                    |
+  |                    |  TIME                         | Time only                                       |  '14:30:00'                      |
+  |                    |  TIMESTAMP                    | Date and time, no timezone                      |  '2025-10-06 14:30:00'           |
+  |                    |  TIMESTAMPTZ                  | Date and time, timezone-aware (stored in UTC)   |  '2025-10-06 14:30:00-05'        |
+  |                    |  INTERVAL                     | A span of time (duration)                       |  '2 days 03:00:00'               |
+
+4. Binary / Other:
+
+  |   Category            |   Data Type    |   Description                                              |   Example                     |
+  | --------------------- | -------------- | ---------------------------------------------------------- | ----------------------------- |
+  |    Binary / Other     |  BYTEA         | Binary data of any size                                    |  (image/file)                 |
+  |                       |  JSON          | JSON-formatted data, stored as plain text                  | '{"name":"Alice","age":25}'   |
+  |                       |  JSONB         | JSON-formatted data, stored in an indexable binary format  | '{"name":"Alice","age":25}'   |
+
+II. PostgreSQL Constraints Table:
+
+|   Constraint                       |   Description (What it does)                                                                                     |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+|   PRIMARY KEY                      | Uniquely identifies each row in the table. Cannot be NULL. Only one per table.                                   |
+|                                    |                                                                                                                  |
+|   SERIAL                           | PostgreSQL's equivalent to MySQL's AUTO_INCREMENT.                                                               |
+|                                    |                                                                                                                  |
+|   NOT NULL                         | Ensures the column cannot store NULL values. Requires a value for every row.                                     |
+|                                    |                                                                                                                  |
+|   NULL                             | Allows the column to store NULL values (missing/unknown data). This is the default.                              |
+|                                    |                                                                                                                  |
+|   UNIQUE                           | Ensures all values in the column are different (prevents duplicates).                                            |
+|                                    |                                                                                                                  |
+|   DEFAULT                          | Sets a default value for the column when the user does not insert one.                                           |
+|                                    |                                                                                                                  |
+|   CHECK                            | Validates a condition that data must satisfy (Example: age > 0).                                                 |
+|                                    |                                                                                                                  |
+|   FOREIGN KEY                      | Creates a relationship between tables. Ensures values must exist in the referenced column of another table.      |
+|                                    |                                                                                                                  |
+|   ON DELETE CASCADE                | If the referenced row is deleted, the related rows in this table are also deleted.                               |
+|                                    |                                                                                                                  |
+|   ON UPDATE CASCADE                | If the referenced row's value is updated, the related rows update automatically.                                 |
+|                                    |                                                                                                                  |
+|   ON DELETE SET NULL               | If the referenced row is deleted, the value in this table is set to NULL.                                        |
+|                                    |                                                                                                                  |
+|   ON DELETE RESTRICT               | Prevents deleting a row if it is referenced in another table.                                                    |
+|                                    |                                                                                                                  |
+|   ON UPDATE RESTRICT               | Prevents updating a referenced row if it affects related rows.                                                   |
+|                                    |                                                                                                                  |
+|   CREATE INDEX                     | Speeds up queries on a column. In PostgreSQL this is always a separate statement.                                |
+|                                    |                                                                                                                  |
+|   PRIMARY KEY (multiple columns)   | Composite key that uniquely identifies rows using more than one column.                                          |
