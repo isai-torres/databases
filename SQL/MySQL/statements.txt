@@ -1,32 +1,41 @@
 I. How to create a table:
 
-	CREATE TABLE table_name (
-		user_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	CREATE TABLE students (
+		student_id INT AUTO_INCREMENT PRIMARY KEY,
 		name VARCHAR(50) NOT NULL,
-		lastname VARCHAR(50),
+		surname VARCHAR(50) NOT NULL,
 		age INT,
-		email VARCHAR(100)
+		email VARCHAR(100) NOT NULL,
+		init_date DATE,
+		UNIQUE(email)
 	);
+
+-- Secundary table related to students (student_id)
+	CREATE TABLE ssn (
+	student_ssn_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	ssn_number INT NOT NULL,
+	student_id INT,
+	UNIQUE(ssn_number),
+	FOREIGN KEY(student_id) REFERENCES students(student_id)
+);
 
 II. Insert Data:
 
 	1. Insert data for one row --> INSERT INTO table_name (user_id, name, lastname, age, email)
-	   VALUES (1, 'Jose', 'Lopez', 35, 'jose@gmail.com');
+	                                               VALUES (1, 'Jose', 'Lopez', 35, 'jose@gmail.com');
 
 	2. Insert data for multiple rows --> INSERT INTO table_name (user_id, name, lastname, age, email)
-	   VALUES (2, 'Maria', 'Gonzales', 23, 'maria@gmail.com')
-	          (3, 'Carlos', 'Colon', 21, 'carlos@gmail.com');
+	                                                     VALUES (2, 'Maria', 'Gonzales', 23, 'maria@gmail.com')
+	                                                            (3, 'Carlos', 'Colon', 21, 'carlos@gmail.com');
 
 	3. You can also specify which database and table to use --> INSERT INTO database_name.table_name (user_id, name, lastname, age, email)
-																                              VALUES (1, 'Jose', 'Lopez', 35, 'jose@gmail.com');
+																                                                            VALUES (1, 'Jose', 'Lopez', 35, 'jose@gmail.com');
 
 III. Select Query:
 
 	1. SELECT * FROM users; --> Retrieves all columns and all rows from the table users.
 
 	2. SELECT name, age FROM users; --> Retrieves only the name and age columns from the table users.
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	3. SELECT * FROM users WHERE age > 25; --> Retrieves all columns and rows from the table users where the value in the age column is greater than 25. You can also use the following:
 
@@ -53,8 +62,7 @@ III. Select Query:
 |                  |  EXISTS       | Checks if a subquery returns results |  EXISTS (SELECT * FROM orders WHERE user_id = 1)    | Returns true if the subquery finds matching rows.                 |
 |                  |  ALL          | Compares with all values in a set    |  age > ALL (SELECT age FROM users WHERE city='NY')  | True if  age  is greater than every value in the subquery.        |
 |                  |  ANY          | Compares with any value in a set     |  age > ANY (SELECT age FROM users WHERE city='NY')  | True if  age  is greater than at least one value in the subquery. |
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 	6. SELECT * FROM users ORDER BY age DESC; --> Retrieves all columns and rows from the table users, sorting the results by the age column in descending order (from highest to lowest).
 
@@ -62,8 +70,6 @@ III. Select Query:
 	   Tip: If you just write ORDER BY age;, MySQL will automatically use ascending order.
 
 	8. SELECT DISTINCT age FROM users; --> Retrieves only the unique values from the age column in the table users, removing any duplicates.
-
---------------------------------------------------------------------------------------------- Important ----------------------------------------------------------------------------------------------
 
 	9. SELECT * FROM users WHERE age <= 30 ORDER BY age; --> You can use multiple clauses together, such as WHERE and ORDER BY, in the same command. This retrieves all columns and rows from the table users where the value in the age column is less than or equal to 30, and then sorts the results by age in ascending order.
 
@@ -107,7 +113,7 @@ VII. ALIAS and CONCAT command:
 
 	19. SELECT name, init_date AS 'Fecha de Inicio de Programación' FROM users; --> Retrieves the name column and the init_date column from the table users, but displays init_date under the label “Fecha de Inicio de Programación” using the AS alias.
 
-	12. SELECT CONCAT(name, lastname) FROM users; --> Combines (concatenates) the values from the name and lastname columns into a single string and returns the result for each row.
+	20. SELECT CONCAT(name, lastname) FROM users; --> Combines (concatenates) the values from the name and lastname columns into a single string and returns the result for each row.
 	Other example --> SELECT CONCAT('Nombre:', ' ', name, ' ', lastname) AS 'Nombre Completo' FROM users;
 
 VIII. GROUP BY  and HAVING command:
@@ -129,7 +135,30 @@ IX. CASE command:
 
 	23. CASE command --> Allows you to create conditional logic inside a SQL query. It works like an IF / ELSE IF / ELSE structure and lets you return different values depending on the condition.
 
-X. Comments:
+X. UPDATE, DELETE a row:
+
+  24. UPDATE students SET age = 19 WHERE student_id = 2; --> update a row, in this case we are updating the student age.
+
+  25. DELETE FROM students WHERE student_id = 3; --> delete a table row.
+
+XI. ALTER a table:
+
+  26. ALTER TABLE table_name ADD COLUMN column_name datatype [constraints]; --> adds a new column to the table.
+
+      ALTER TABLE table_name DROP COLUMN column_name; --> removes an existing column
+
+      ALTER TABLE table_name MODIFY COLUMN column_name new_datatype [constraints]; --> changes the data type and/or constraints of an existing column.
+
+      ALTER TABLE table_name CHANGE COLUMN old_name new_name datatype [constraints]; --> Renames a column and lets you change its data type and constraints at the same time.
+
+      ALTER TABLE table_name ADD PRIMARY KEY (column_name); --> add a primary key to a column.
+
+      ALTER TABLE table_name ADD CONSTRAINT constraint_name [constraint] (column_name); --> add a constraint.
+
+      ALTER TABLE table_name RENAME TO new_table_name; --> rename a table.
+
+
+XII. Comments:
 
 	|  Comments in MySQL     |  Example                     |
 	| ---------------------- | ---------------------------- |
